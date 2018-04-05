@@ -1,8 +1,11 @@
+import java.util.HashMap;
+
 public class BoardSquare {
    private Card card;
    private int column;
    private int row;
    private boolean selected;
+   private static HashMap<Integer, int[]> dict = new HashMap<>();
    
    /**
    Default constructor
@@ -15,6 +18,7 @@ public class BoardSquare {
       this.column = column;
       this.row = row;
       selected = false;
+      dict.put(Card.cardEncoder(card), new int[] {this.column, this.row} );
    }
    
    /**
@@ -42,22 +46,32 @@ public class BoardSquare {
    public boolean isSelected() { return selected; }
    
    /**
-   sets card object in square
+   sets card object in square, replaces dict key to correspond with new card
    @param c card to go into square
    */
-   public void setCard(Card c){ card = c; }
+   public void setCard(Card c){
+       dict.remove(Card.cardEncoder(card));
+       dict.put(Card.cardEncoder(c), new int [] {column, row});
+       card = c;
+   }
    
    /**
-   sets row index of boardSquare
+   sets row index of boardSquare, replaces dict value to correspond with new row
    @param r row index to set
    */
-   public void setRow(int r){ row = r; }
+   public void setRow(int r){
+       dict.replace(Card.cardEncoder(card), new int [] {column, r});
+       row = r;
+   }
    
    /**
-   sets column index of boardsquare
+   sets column index of boardSquare, replaces dict value to correspond with new column
    @param c column index to be set
    */
-   public void setColumn(int c){ column = c; }
+   public void setColumn(int c){
+       dict.replace(Card.cardEncoder(card), new int [] {c, row});
+       column = c;
+   }
    
    /**
    sets selection state of square
@@ -67,5 +81,12 @@ public class BoardSquare {
    
    @Override
    public String toString(){ return card.toString(); }
+
+    /**
+    Gets location of a card given the hashed value of the card (returns null if card is not present
+    @param cardHash Hash of the card being looked for
+    @return location on board of the card, null if card is not on board
+    */
+   public static int [] getCardLocation(int cardHash) { return dict.get(cardHash); }
 
 }

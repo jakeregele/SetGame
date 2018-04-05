@@ -11,5 +11,8 @@ public class SetDriver {
         System.out.println(Card.cardEncoder(Card.thirdCard(c1, c2)));
         System.out.println(Card.cardEncoder(c1));
         System.out.println(Card.cardEncoder(c2));
+        Card c = b.getCard(2, 3);
+        System.out.println(BoardSquare.getCardLocation(Card.cardEncoder(c))[0]);
+        System.out.println(BoardSquare.getCardLocation(Card.cardEncoder(c))[1]);
     }
 }

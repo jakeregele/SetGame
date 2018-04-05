@@ -111,7 +111,7 @@ public class Card {
     @param c card to be encoded
     @return ordinals of card values converted to binary, concatenated, and then converted back to base 10
     */
-   public static int cardEncoder(Card c){
+   public static Integer cardEncoder(Card c){
        String out = Integer.toBinaryString(c.color.ordinal()) +
                     Integer.toBinaryString(c.shape.ordinal()) +
                     Integer.toBinaryString(c.number.ordinal()) +
@@ -125,7 +125,7 @@ public class Card {
     @param list list meant to represent card
     @return encoded value of card
     */
-   public static int cardEncoder(ArrayList<Integer> list){
+   public static Integer cardEncoder(ArrayList<Integer> list){
        String out = Integer.toBinaryString(list.get(0)) +
                     Integer.toBinaryString(list.get(1)) +
                     Integer.toBinaryString(list.get(2)) +
