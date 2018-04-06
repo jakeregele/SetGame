@@ -8,8 +8,8 @@ public class Deck {
    private Random r = new Random();
    
    /**
-   Default constructor, creates deck with all possible cards
-   */
+    Default constructor, creates deck with all possible cards
+    */
    public Deck() {
       for (Card.COLOR c : Card.COLOR.values())
          for (Card.SHAPE s : Card.SHAPE.values())
@@ -19,8 +19,8 @@ public class Deck {
    }
    
    /**
-   Shuffles deck by swaping every index with a random other index
-   */
+    Shuffles deck by swaping every index with a random other index
+    */
    public void shuffle(){
       for (int i = 0; i < deck.size(); i++){
          Collections.swap(deck, i, r.nextInt(deck.size()-1));
@@ -28,16 +28,16 @@ public class Deck {
    }
    
    /**
-   Returns true if deck is empty
-   @return true if deck is empty, false if it is not
-   */
+    Returns true if deck is empty
+    @return true if deck is empty, false if it is not
+    */
    public boolean isEmpty(){ return (deck.size() < 1); }
    
    /**
-   Removes card from the 'top' of the deck and gives it 
-   to the caller
-   @return card from the top of the deck
-   */
+    Removes card from the 'top' of the deck and gives it
+    to the caller
+    @return card from the top of the deck
+    */
    public Card getTopCard(){ return deck.remove(deck.size()-1); }
    
    @Override

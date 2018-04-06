@@ -8,13 +8,13 @@ public class Card {
    private final FILL fill;
    
    /**
-   Default constructor, takes color, shape, 
-   number, and fill and creates a new card object
-   @param c color of card
-   @param s shape of card
-   @param n number on card
-   @param f fill on card
-   */
+    Default constructor, takes color, shape,
+    number, and fill and creates a new card object
+    @param c color of card
+    @param s shape of card
+    @param n number on card
+    @param f fill on card
+    */
    public Card(COLOR c, SHAPE s, NUMBER n, FILL f) {
       this.color = c;
       this.shape = s;
@@ -23,35 +23,35 @@ public class Card {
    }
    
    /**
-   Enum for color
-   */
+    Enum for color
+    */
    public enum COLOR{
       RED,
       BLUE,
       GREEN      
       }
-   
-    /**
-   Enum for shape
-   */   
+
+   /**
+    Enum for shape
+    */
    public enum SHAPE{
       CIRCLE,
       SQUARE,
       DIAMOND,
       }
    
-    /**
-   Enum for number
-   */   
+   /**
+    Enum for number
+    */
    public enum NUMBER{
       ONE,
       TWO,
       THREE
       }
    
-    /**
-   Enum for fill
-   */   
+   /**
+    Enum for fill
+    */
    public enum FILL{
       FILLED,
       HASHED,
@@ -64,15 +64,25 @@ public class Card {
              number.name() + "_" + 
              fill.name();
    }
-   
+
    /**
-   Given three cards, determines if cards are a set
-   if the sum of the indexes of a groups properties is divisible by three they are a set
-   @param c1 First card for checking
-   @param c2 Second card for checking
-   @param c3 Third card for checking
-   @return whether or not the cards form a set
-   */   
+    Given three cards, determines if cards are a set
+    if the sum of the indexes of a groups properties is divisible by three they are a set
+    @param list ArrayList containing BoardSquare objects (each containing cards)
+    @return whether or not the cards are a set
+    */
+   public static boolean isSet(ArrayList<BoardSquare> list) {
+      return isSet(list.get(0).getCard(), list.get(1).getCard(), list.get(2).getCard());
+   }
+
+   /**
+    Given three cards, determines if cards are a set
+    if the sum of the indexes of a groups properties is divisible by three they are a set
+    @param c1 First card for checking
+    @param c2 Second card for checking
+    @param c3 Third card for checking
+    @return whether or not the cards form a set
+    */
    public static boolean isSet(Card c1, Card c2, Card c3) {
       int colorCheck;
       int shapeCheck;
@@ -91,11 +101,11 @@ public class Card {
    }
 
     /**
-    Looks at two cards and determines what the third card in the set is
-    @param c1 first card in set
-    @param c2 second card in set
-    @return ordinal enum values for the missing card in the set
-    */
+     Looks at two cards and determines what the third card in the set is
+     @param c1 first card in set
+     @param c2 second card in set
+     @return ordinal enum values for the missing card in the set
+     */
    public static ArrayList<Integer> thirdCard(Card c1, Card c2){
       ArrayList<Integer> outCard = new ArrayList<>();
       outCard.add(Math.floorMod((-c1.color.ordinal() - c2.color.ordinal()),3));
@@ -107,10 +117,10 @@ public class Card {
    }
 
     /**
-    Encodes card data into and then out of binary for easier searching in hash table
-    @param c card to be encoded
-    @return ordinals of card values converted to binary, concatenated, and then converted back to base 10
-    */
+     Encodes card data into and then out of binary for easier searching in hash table
+     @param c card to be encoded
+     @return ordinals of card values converted to binary, concatenated, and then converted back to base 10
+     */
    public static Integer cardEncoder(Card c){
        String out = Integer.toBinaryString(c.color.ordinal()) +
                     Integer.toBinaryString(c.shape.ordinal()) +
@@ -121,10 +131,10 @@ public class Card {
    }
 
     /**
-    Finds encoded value of a 'fake' card represented by an array of int values
-    @param list list meant to represent card
-    @return encoded value of card
-    */
+     Finds encoded value of a 'fake' card represented by an array of int values
+     @param list list meant to represent card
+     @return encoded value of card
+     */
    public static Integer cardEncoder(ArrayList<Integer> list){
        String out = Integer.toBinaryString(list.get(0)) +
                     Integer.toBinaryString(list.get(1)) +
