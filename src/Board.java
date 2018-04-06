@@ -33,7 +33,18 @@ public class Board {
     @return boardSquare at given coordinates
     */
    public BoardSquare getBoardSquare(int row, int column){ return board.get(row).get(column); }
-   
+
+   /**
+    removes and returns BoardSquare at a given index
+    @param row row of BoardSquare to be removed
+    @param column column of BoardSquare to be removed
+    @return value of removed BoardSquare
+    */
+   public BoardSquare removeBoardSquare(int row, int column) {
+      BoardSquare b = getBoardSquare(row, column);
+      board.get(row).remove(column);
+      return b;
+   }
    /**
     returns card at given coordinates
     @param row row of desired card
@@ -61,6 +72,14 @@ public class Board {
    public void add3(Deck deck){
       for (int i = 0; i < 3; i++)
          board.get(i).add(new BoardSquare(deck.getTopCard(), i, board.get(1).size()));
+   }
+
+   public void sub3() {
+      if (board.get(0).size() > 4) {
+         board.get(0).remove(board.get(0).size() - 1);
+         board.get(1).remove(board.get(1).size() - 1);
+         board.get(2).remove(board.get(2).size() - 1);
+      }
    }
    
    @Override

@@ -66,6 +66,10 @@ public class BoardSquare {
        card = null;
        return c;
    }
+
+   public boolean hasCard() {
+       return (card != null);
+   }
    
    /**
     sets row index of boardSquare, replaces dict value to correspond with new row

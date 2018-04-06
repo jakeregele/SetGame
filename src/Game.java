@@ -12,6 +12,7 @@ public class Game {
      */
     public Game(){
         deck = new Deck();
+        //deck.shuffle();
         board = new Board(deck);
         selected = new ArrayList<>();
     }
@@ -48,7 +49,36 @@ public class Game {
      of their rows if the rows contain more than 4 cards
      */
     public void testSelected(){
-
+        if (Card.isSet(selected)) {
+            selected.get(0).removeCard();
+            selected.get(1).removeCard();
+            selected.get(2).removeCard();
+            if (board.numColumns() > 4) {
+                ArrayList<BoardSquare> endElements = new ArrayList<>();
+                ArrayList<BoardSquare> selectedReplacer = new ArrayList<>();
+                endElements.add(board.getBoardSquare(0, board.numColumns()-1));
+                endElements.add(board.getBoardSquare(1, board.numColumns()-1));
+                endElements.add(board.getBoardSquare(2, board.numColumns()-1));
+                for (BoardSquare square : selected) {
+                    if (endElements.contains(square)) {
+                        endElements.remove(square);
+                    } else {
+                        selectedReplacer.add(square);
+                    }
+                    selected.clear();
+                }
+                int i = endElements.size() - 1;
+                for (BoardSquare square : selectedReplacer) {
+                    square.setCard(endElements.get(i--).removeCard());
+                }
+                board.sub3();
+            } else {
+                selected.get(0).setCard(deck.getTopCard());
+                selected.get(1).setCard(deck.getTopCard());
+                selected.get(2).setCard(deck.getTopCard());
+                selected.clear();
+            }
+        }
     }
 
     /**
@@ -56,8 +86,26 @@ public class Game {
      combinations are of 2 cards, method then calculates the third
      card and searches a hash table of existing cards to find location
      */
-    public void findSet(){
-
+    public ArrayList<Card> findSet(){
+        ArrayList<Card> foundSet = new ArrayList<>();
+        for (int a = 0 ; a < board.numRows() ; a++){
+            for (int b = 0; b < board.numColumns() ; b++){
+                for (int c = a++; c < board.numRows() - 1 ; c++){
+                    for (int d = b++ ; c < board.numRows() - 1 ; d++){
+                        int thirdCard =
+                                Card.cardEncoder(Card.thirdCard(board.getCard(a, b), board.getCard(c, d)));
+                        if (BoardSquare.getCardLocation(thirdCard) != null) {
+                            foundSet.add(board.getCard(a, b));
+                            foundSet.add(board.getCard(c, d));
+                            int [] thirdCardLocation = BoardSquare.getCardLocation(thirdCard);
+                            foundSet.add(board.getCard(thirdCardLocation[0], thirdCardLocation[1]));
+                            return foundSet;
+                        }
+                    }
+                }
+            }
+        }
+    return foundSet;
     }
 
     /**
