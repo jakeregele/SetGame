@@ -50,7 +50,7 @@ public class BoardSquare {
     @param c card to go into square
     */
    public void setCard(Card c){
-       dict.remove(Card.cardEncoder(card));
+       dict.remove(Card.cardEncoder(c));
        dict.put(Card.cardEncoder(c), new int [] {column, row});
        card = c;
    }

@@ -65,8 +65,8 @@ public class Game {
                     } else {
                         selectedReplacer.add(square);
                     }
-                    selected.clear();
                 }
+                selected.clear();
                 int i = endElements.size() - 1;
                 for (BoardSquare square : selectedReplacer) {
                     square.setCard(endElements.get(i--).removeCard());
