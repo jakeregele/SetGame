@@ -12,7 +12,7 @@ public class Game {
      */
     public Game(){
         deck = new Deck();
-        //deck.shuffle();
+        deck.shuffle();
         board = new Board(deck);
         selected = new ArrayList<>();
     }

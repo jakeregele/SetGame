@@ -19,14 +19,6 @@ public class Board {
    }
    
    /**
-    Replaces card at specified coordinates
-    @param c the card that will replace a chosen card
-    @param row row of card to be replaced
-    @param column column of card to be replaced
-    */
-   public void replaceCard(Card c, int row, int column){ board.get(row).get(column).setCard(c); }
-   
-   /**
     returns boardSquare object at given coordinates
     @param row row of desired boardSquare
     @param column column of desired boardSquare
@@ -34,17 +26,6 @@ public class Board {
     */
    public BoardSquare getBoardSquare(int row, int column){ return board.get(row).get(column); }
 
-   /**
-    removes and returns BoardSquare at a given index
-    @param row row of BoardSquare to be removed
-    @param column column of BoardSquare to be removed
-    @return value of removed BoardSquare
-    */
-   public BoardSquare removeBoardSquare(int row, int column) {
-      BoardSquare b = getBoardSquare(row, column);
-      board.get(row).remove(column);
-      return b;
-   }
    /**
     returns card at given coordinates
     @param row row of desired card
