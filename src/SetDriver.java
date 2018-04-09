@@ -13,6 +13,7 @@ public class SetDriver
         // connect Scanner to keyboard
         Scanner keyboard = new Scanner(System.in);
         // variables for user input
+        g.findSet();
         int row, col;
         String input;
         // flag for ending

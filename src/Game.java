@@ -90,8 +90,8 @@ public class Game {
         ArrayList<Card> foundSet = new ArrayList<>();
         for (int a = 0 ; a < board.numRows() ; a++){
             for (int b = 0; b < board.numColumns() ; b++){
-                for (int c = a++; c < board.numRows() - 1 ; c++){
-                    for (int d = b++ ; c < board.numRows() - 1 ; d++){
+                for (int c = 0; c < board.numRows() ; c++){
+                    for (int d = 1 ; c < board.numColumns() ; d++){
                         int thirdCard =
                                 Card.cardEncoder(Card.thirdCard(board.getCard(a, b), board.getCard(c, d)));
                         if (BoardSquare.getCardLocation(thirdCard) != null) {
