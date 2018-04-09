@@ -55,6 +55,9 @@ public class Board {
          board.get(i).add(new BoardSquare(deck.getTopCard(), i, board.get(1).size()));
    }
 
+    /**
+     removes the last index of each row
+     */
    public void sub3() {
       if (board.get(0).size() > 4) {
          board.get(0).remove(board.get(0).size() - 1);

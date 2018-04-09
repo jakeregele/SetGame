@@ -67,6 +67,10 @@ public class BoardSquare {
        return c;
    }
 
+    /**
+     returns true if the board has a card object
+     @return wether or not the square has a card
+     */
    public boolean hasCard() {
        return (card != null);
    }
