@@ -57,6 +57,39 @@ public class Card {
       HASHED,
       EMPTY
       }
+
+   /**
+    returns ordinal for number of shapes
+     @return number of shapes (ordinal)
+    */
+   public int getNum(){
+      return number.ordinal();
+   }
+
+   /**
+    returns ordinal for shape
+    @return shape ordinal value
+    */
+   public int getShape(){
+      return shape.ordinal();
+   }
+
+   /**
+    returns ordinal for color value
+    @return color ordinal value
+    */
+   public int getColor(){
+      return color.ordinal();
+   }
+
+   /**
+    return ordinal for fill value
+    @return fill ordinal value
+    */
+   public int getFill(){
+      return fill.ordinal();
+   }
+
    @Override   
    public String toString(){
       return color.name() + "_" + 

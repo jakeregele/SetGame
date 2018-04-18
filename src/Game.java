@@ -22,8 +22,13 @@ public class Game {
      @param row row of square being selected
      @param col column of square being selected
      */
-    public void addToSelected(int row, int col){
-        selected.add(board.getBoardSquare(row, col));
+    public boolean addToSelected(int row, int col){
+        if (!selected.contains(board.getBoardSquare(row, col))) {
+            selected.add(board.getBoardSquare(row, col));
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -41,6 +46,14 @@ public class Game {
      */
     public ArrayList<BoardSquare> getSelected() {
         return selected;
+    }
+
+    /**
+     returns an ArrayList of every BoardSquare for drawing the board
+     @return nested ArrayLists of BoardSquares
+     */
+    public ArrayList<ArrayList<BoardSquare>> getAllRows(){
+        return board.getAllRows();
     }
 
     /**
@@ -78,6 +91,8 @@ public class Game {
                 selected.get(2).setCard(deck.getTopCard());
                 selected.clear();
             }
+        } else {
+            selected.clear();
         }
     }
 

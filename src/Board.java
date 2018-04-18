@@ -17,7 +17,14 @@ public class Board {
          }
       }
    }
-   
+
+    /**
+     returns an ArrayList of every BoardSquare for drawing the board
+     @return nested ArrayLists of BoardSquares
+     */
+   public ArrayList<ArrayList<BoardSquare>> getAllRows(){
+       return board;
+   }
    /**
     returns boardSquare object at given coordinates
     @param row row of desired boardSquare
