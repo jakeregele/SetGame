@@ -16,6 +16,7 @@ public class Game {
         deck.shuffle();
         board = new Board(deck);
         selected = new ArrayList<>();
+        found = new ArrayList<>();
     }
 
     /**
@@ -76,6 +77,7 @@ public class Game {
                     }
                 }
                 selected.clear();
+                clearFound();
                 int i = endElements.size() - 1;
                 for (BoardSquare square : selectedReplacer) {
                     square.setCard(endElements.get(i--).removeCard());
@@ -86,6 +88,7 @@ public class Game {
                 selected.get(1).setCard(deck.getTopCard());
                 selected.get(2).setCard(deck.getTopCard());
                 selected.clear();
+                clearFound();
             }
         } else {
             selected.clear();
@@ -97,42 +100,43 @@ public class Game {
      combinations are of 2 cards, method then calculates the third
      card and searches a hash table of existing cards to find location
      */
-    public ArrayList<Card> findSet(){
+    public ArrayList<BoardSquare> findSet(){
         ArrayList<Card> foundSet = new ArrayList<>();
+        ArrayList<BoardSquare> outSet = new ArrayList<>();
         for (int a = 0 ; a < board.numRows() ; a++){
             for (int b = 0; b < board.numColumns() ; b++){
                 for (int c = 0; c < board.numRows() ; c++){
-                    for (int d = 0 ; d < board.numColumns() ; d++){
+                    for (int d = 1 ; d < board.numColumns() ; d++){
                         if (board.getCard(a, b) != board.getCard(c, d)) {
-                            int thirdCard =
+                            String thirdCard =
                                     Card.cardEncoder(Card.thirdCard(board.getCard(a, b), board.getCard(c, d)));
-                            if (BoardSquare.getCardLocation(thirdCard) != null) {
+                            if (BoardSquare.containsKey(thirdCard)) {
                                 foundSet.add(board.getCard(a, b));
                                 foundSet.add(board.getCard(c, d));
                                 int[] thirdCardLocation = BoardSquare.getCardLocation(thirdCard);
                                 foundSet.add(board.getCard(thirdCardLocation[0], thirdCardLocation[1]));
                                 for (Card card : foundSet)
-                                    BoardSquare.getCardLocation(Card.cardEncoder(card));
-                                return foundSet;
+                                    outSet.add(board.getBoardSquare(BoardSquare.getCardLocation(Card.cardEncoder(card))));
+                                return outSet;
                             }
                         }
                     }
                 }
             }
         }
-    return foundSet;
+    return outSet;
     }
 
     /**
      add list of 'found' cards to list and change their found indicators
      @param list list of found cards
      */
-    public void setFound(ArrayList<Card> list) {
+    public void setFound(ArrayList<BoardSquare> list) {
         if (list.size() > 0) {
-            for (Card c : list)
-                found.add(board.getBoardSquare(BoardSquare.getCardLocation(Card.cardEncoder(c))));
-            for (BoardSquare b : found)
+            for (BoardSquare b : list) {
                 b.setFound(true);
+                found.add(b);
+            }
         }
     }
 

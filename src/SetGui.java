@@ -13,11 +13,13 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Circle;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Ellipse;
+import javafx.geometry.Pos;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+
 
 public class SetGui extends Application implements EventHandler<ActionEvent> {
 
@@ -53,8 +55,10 @@ public class SetGui extends Application implements EventHandler<ActionEvent> {
         add3.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                game.add3();
-                drawBoard();
+                if (!game.outOfCards()) {
+                    game.add3();
+                    drawBoard();
+                }
             }
         });
 
@@ -87,6 +91,7 @@ public class SetGui extends Application implements EventHandler<ActionEvent> {
         cardContainer = new GridPane();
         cardContainer.setHgap(15);
         cardContainer.setVgap(15);
+        cardContainer.setAlignment(Pos.CENTER);
 
         title = new Text("Game of Set");
         cardsLeft = new Text("Cards left: " + game.cardsLeft());
@@ -136,8 +141,6 @@ public class SetGui extends Application implements EventHandler<ActionEvent> {
                     public void handle(javafx.scene.input.MouseEvent event) {
                             CardPane c = (CardPane)(event.getSource());
                             BoardSquare b = c.getBoardSquare();
-                            System.out.println(b);
-                            System.out.println(b.getRow() + "  " + b.getColumn());
                             if (b.isSelected()) {
                                 b.setSelect(false);
                                 game.removeSelected(b.getRow(), b.getColumn());
@@ -145,13 +148,14 @@ public class SetGui extends Application implements EventHandler<ActionEvent> {
                                 b.setSelect(true);
                                 game.addToSelected(b.getRow(), b.getColumn());
                             }
-                            System.out.println(game.getSelected());
+                            b.setFound(false);
                             if (game.numSelected() == 3) {
                                 for (BoardSquare selected : game.getSelected())
                                     selected.setSelect(false);
                                 game.testSelected();
+                                game.clearFound();
                             }
-                            game.clearFound();
+
                             drawBoard();
                     }
                 });

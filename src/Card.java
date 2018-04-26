@@ -141,10 +141,10 @@ public class Card {
      */
    public static ArrayList<Integer> thirdCard(Card c1, Card c2){
       ArrayList<Integer> outCard = new ArrayList<>();
-      outCard.add(Math.floorMod((-c1.color.ordinal() - c2.color.ordinal()),3));
-      outCard.add(Math.floorMod((-c1.shape.ordinal() - c2.shape.ordinal()),3));
-      outCard.add(Math.floorMod((-c1.number.ordinal() - c2.number.ordinal()),3));
-      outCard.add(Math.floorMod((-c1.fill.ordinal() - c2.fill.ordinal()),3));
+      outCard.add(Math.floorMod((-1 * c1.color.ordinal() +  -1 * c2.color.ordinal()),3));
+      outCard.add(Math.floorMod((-1 * c1.shape.ordinal() + -1 * c2.shape.ordinal()),3));
+      outCard.add(Math.floorMod((-1 * c1.number.ordinal() + -1 * c2.number.ordinal()),3));
+      outCard.add(Math.floorMod((-1 * c1.fill.ordinal() + - 1 *c2.fill.ordinal()),3));
 
       return outCard;
    }
@@ -154,13 +154,13 @@ public class Card {
      @param c card to be encoded
      @return ordinals of card values converted to binary, concatenated, and then converted back to base 10
      */
-   public static Integer cardEncoder(Card c){
-       String out = Integer.toBinaryString(c.color.ordinal()) +
-                    Integer.toBinaryString(c.shape.ordinal()) +
-                    Integer.toBinaryString(c.number.ordinal()) +
-                    Integer.toBinaryString(c.fill.ordinal());
+   public static String cardEncoder(Card c){
+       String out = Integer.toString(c.color.ordinal()) +
+                    Integer.toString(c.shape.ordinal()) +
+                    Integer.toString(c.number.ordinal()) +
+                    Integer.toString(c.fill.ordinal());
 
-       return Integer.parseInt(out, 2);
+       return out;
    }
 
     /**
@@ -168,12 +168,12 @@ public class Card {
      @param list list meant to represent card
      @return encoded value of card
      */
-   public static Integer cardEncoder(ArrayList<Integer> list){
-       String out = Integer.toBinaryString(list.get(0)) +
-                    Integer.toBinaryString(list.get(1)) +
-                    Integer.toBinaryString(list.get(2)) +
-                    Integer.toBinaryString(list.get(3));
+   public static String cardEncoder(ArrayList<Integer> list){
+       String out = Integer.toString(list.get(0)) +
+                    Integer.toString(list.get(1)) +
+                    Integer.toString(list.get(2)) +
+                    Integer.toString(list.get(3));
 
-       return Integer.parseInt(out, 2);
+       return out;
    }
 }
