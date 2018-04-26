@@ -39,6 +39,8 @@ public class Deck {
     @return card from the top of the deck
     */
    public Card getTopCard(){ return deck.remove(deck.size()-1); }
+
+   public int cardsLeft() { return  deck.size(); }
    
    @Override
    public String toString(){

@@ -5,6 +5,7 @@ public class BoardSquare {
    private int column;
    private int row;
    private boolean selected;
+   private boolean found;
    private static HashMap<Integer, int[]> dict = new HashMap<>();
    
    /**
@@ -13,12 +14,13 @@ public class BoardSquare {
     @param column column number of boardSquare
     @param row row number of boardSquare
     */
-   public BoardSquare(Card card, int column, int row) {
+   public BoardSquare(Card card, int row, int column) {
       this.card = card;
       this.column = column;
       this.row = row;
       selected = false;
-      dict.put(Card.cardEncoder(card), new int[] {this.column, this.row} );
+      found = false;
+      dict.put(Card.cardEncoder(card), new int[] {this.row, this.column} );
    }
    
    /**
@@ -44,6 +46,12 @@ public class BoardSquare {
     @return current selection state of square
     */
    public boolean isSelected() { return selected; }
+
+    /**
+     is the current square found
+     @return if card is found
+     */
+   public boolean isFound() {return found;}
    
    /**
     sets card object in square, replaces dict key to correspond with new card
@@ -98,6 +106,12 @@ public class BoardSquare {
     @param s value whether or not board is selected
     */
    public void setSelect(boolean s){ selected = s; }
+
+    /**
+     sets found variable for highlighting cards with find set
+     @param f whether or not a card is found
+     */
+   public void setFound(boolean f) {found = f;}
    
    @Override
    public String toString(){ return card.toString(); }

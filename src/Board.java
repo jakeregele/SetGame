@@ -40,6 +40,13 @@ public class Board {
     @return card at given coordinates
     */
    public Card getCard(int row, int column){ return board.get(row).get(column).getCard(); }
+
+    /**
+     returns BoardSquare given an array with coordinates
+     @param arr array of coordinates
+     @return BoardSquare at location
+     */
+   public BoardSquare getBoardSquare(int [] arr) { return board.get(arr[0]).get(arr[1]);}
    
    /**
     Gives number of rows in current board
@@ -54,12 +61,15 @@ public class Board {
    public int numColumns(){ return board.get(1).size(); }
    
    /**
-    Adds three cards to the board (onto the right side)
+    Adds three cards to the board (onto the right side) with a maximum of 21 cards
     @param deck deck to be used for new card objects, should be same deck as constructor
     */
-   public void add3(Deck deck){
-      for (int i = 0; i < 3; i++)
-         board.get(i).add(new BoardSquare(deck.getTopCard(), i, board.get(1).size()));
+   public void add3(Deck deck) {
+       if (board.get(0).size() < 7) {
+           int col = board.get(1).size();
+           for (int i = 0; i < 3; i++)
+               board.get(i).add(new BoardSquare(deck.getTopCard(), i, col));
+       }
    }
 
     /**

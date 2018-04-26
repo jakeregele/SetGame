@@ -1,12 +1,10 @@
 import javafx.application.Application;
 import javafx.event.Event;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.scene.control.Button;
 import javafx.event.ActionEvent;
@@ -16,28 +14,180 @@ import javafx.scene.shape.Circle;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Ellipse;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class SetGui extends Application implements EventHandler<ActionEvent> {
 
-    Game game;
+    private Game game;
 
-    Button add3, newGame, exitGame, findSet;
+    private Button add3, newGame, exitGame, findSet;
 
-    BorderPane primaryPane;
-    HBox buttonContainer;
-    HBox titleContainer;
-    GridPane cardContainer;
-    Text title;
+    private BorderPane primaryPane;
+    private HBox bottomContainer;
+    private HBox titleContainer;
+    private GridPane cardContainer;
+    private Text title, cardsLeft;
 
+
+
+
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
+        game = new Game();
+
+        primaryStage.setTitle("Game of Set");
+
+        add3 = new Button("Add 3");
+        newGame = new Button("New Game");
+        exitGame = new Button("Exit");
+        findSet = new Button("Help!");
+
+        add3.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                game.add3();
+                drawBoard();
+            }
+        });
+
+        newGame.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                start(primaryStage);
+            }
+        });
+
+        exitGame.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                System.exit(0);
+            }
+        });
+
+        findSet.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                game.setFound(game.findSet());
+                drawBoard();
+            }
+        });
+
+        primaryPane = new BorderPane();
+        bottomContainer = new HBox();
+        titleContainer = new HBox();
+
+        cardContainer = new GridPane();
+        cardContainer.setHgap(15);
+        cardContainer.setVgap(15);
+
+        title = new Text("Game of Set");
+        cardsLeft = new Text("Cards left: " + game.cardsLeft());
+
+        drawBoard();
+        bottomContainer.getChildren().add(newGame);
+        bottomContainer.getChildren().add(add3);
+        bottomContainer.getChildren().add(findSet);
+        bottomContainer.getChildren().add(exitGame);
+        bottomContainer.getChildren().add(cardsLeft);
+
+        titleContainer.getChildren().add(title);
+
+        primaryPane.setBottom(bottomContainer);
+        primaryPane.setCenter(cardContainer);
+        primaryPane.setTop(titleContainer);
+
+        Scene primaryScene = new Scene(primaryPane);
+
+        primaryStage.setScene(primaryScene);
+
+        primaryStage.show();
+
+
+    }
+
+
+
+    @Override
+    public void handle(ActionEvent event) {
+
+
+    }
+
+
+    public void drawBoard(){
+        cardContainer.getChildren().clear();
+        cardsLeft.setText("Cards Left: " + game.cardsLeft());
+        int row = 0;
+        int col;
+        for (ArrayList<BoardSquare> list : game.getAllRows()) {
+            col = 0;
+            for (BoardSquare boardSquare : list) {
+                CardPane pane = new CardPane(boardSquare);
+                pane.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
+                    @Override
+                    public void handle(javafx.scene.input.MouseEvent event) {
+                            CardPane c = (CardPane)(event.getSource());
+                            BoardSquare b = c.getBoardSquare();
+                            System.out.println(b);
+                            System.out.println(b.getRow() + "  " + b.getColumn());
+                            if (b.isSelected()) {
+                                b.setSelect(false);
+                                game.removeSelected(b.getRow(), b.getColumn());
+                            } else {
+                                b.setSelect(true);
+                                game.addToSelected(b.getRow(), b.getColumn());
+                            }
+                            System.out.println(game.getSelected());
+                            if (game.numSelected() == 3) {
+                                for (BoardSquare selected : game.getSelected())
+                                    selected.setSelect(false);
+                                game.testSelected();
+                            }
+                            game.clearFound();
+                            drawBoard();
+                    }
+                });
+                cardContainer.add(pane ,col, row );
+                col++;
+            }
+            row++;
+        }
+    }
 
     public class CardPane extends VBox {
         private BoardSquare boardSquare;
 
+
+
         public CardPane(BoardSquare boardSquare){
             this.boardSquare = boardSquare;
+            if (boardSquare.isSelected()) {
+                this.setBackground(new Background(new BackgroundFill(Paint.valueOf("ALICEBLUE"),
+                        new CornerRadii(0),
+                        new Insets(0))));
+            } else if (boardSquare.isFound()) {
+                this.setBackground(new Background(new BackgroundFill(Paint.valueOf("RED"),
+                        new CornerRadii(0),
+                        new Insets(0))));
+            } else {
+                this.setBackground(new Background(new BackgroundFill(Paint.valueOf("WHITE"),
+                        new CornerRadii(0),
+                        new Insets(0))));
+            }
             drawCard();
 
+        }
+
+        public BoardSquare getBoardSquare() {
+            return boardSquare;
         }
 
         public void drawCard() {
@@ -49,13 +199,14 @@ public class SetGui extends Application implements EventHandler<ActionEvent> {
             for (int i = 1; i <= num + 1 ; i++) {
                 switch (shape) {
                     case 0:
-                        drawSquare(color, fill);
+                        drawOval(color, fill);
                         break;
                     case 1:
-                        drawSquiggle(color, fill);
+                        drawSquare(color, fill);
                         break;
                     case 2:
-                        drawOval(color, fill);
+                        drawSquiggle(color, fill);
+
 
                 }
             }
@@ -78,7 +229,7 @@ public class SetGui extends Application implements EventHandler<ActionEvent> {
                     r.setFill(r.getStroke());
                     break;
                 case 1:
-                    r.setFill(r.getStroke());
+                    r.setFill(Paint.valueOf("GREY"));
                     break;
                 case 2:
                     r.setFill(Paint.valueOf("WHITE"));
@@ -103,7 +254,7 @@ public class SetGui extends Application implements EventHandler<ActionEvent> {
                     e.setFill(e.getStroke());
                     break;
                 case 1:
-                    e.setFill(e.getStroke());
+                    e.setFill(Paint.valueOf("GREY"));
                     break;
                 case 2:
                     e.setFill(Paint.valueOf("WHITE"));
@@ -129,7 +280,7 @@ public class SetGui extends Application implements EventHandler<ActionEvent> {
                     c.setFill(c.getStroke());
                     break;
                 case 1:
-                    c.setFill(c.getStroke());
+                    c.setFill(Paint.valueOf("GREY"));
                     break;
                 case 2:
                     c.setFill(Paint.valueOf("WHITE"));
@@ -138,69 +289,8 @@ public class SetGui extends Application implements EventHandler<ActionEvent> {
         }
     }
 
-
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    @Override
-    public void start(Stage primaryStage) {
-        game = new Game();
-
-        primaryStage.setTitle("Game of Set");
-
-        add3 = new Button("Add 3");
-        newGame = new Button("New Game");
-        exitGame = new Button("Exit");
-        findSet = new Button("Help!");
-
-        primaryPane = new BorderPane();
-        buttonContainer = new HBox();
-        titleContainer = new HBox();
-        cardContainer = new GridPane();
-        title = new Text("Game of Set");
-
-        drawBoard();
-        buttonContainer.getChildren().add(newGame);
-        buttonContainer.getChildren().add(add3);
-        buttonContainer.getChildren().add(findSet);
-        buttonContainer.getChildren().add(exitGame);
-
-        titleContainer.getChildren().add(title);
-
-        primaryPane.setBottom(buttonContainer);
-        primaryPane.setCenter(cardContainer);
-        primaryPane.setTop(titleContainer);
-
-        Scene primaryScene = new Scene(primaryPane);
-
-        primaryStage.setScene(primaryScene);
-
-        primaryStage.show();
-
-
-    }
-
-
-
-    @Override
-    public void handle(ActionEvent event) {
-        
-
-    }
-
-    public void drawBoard(){
-        int row = 0;
-        int col;
-        for (ArrayList<BoardSquare> list : game.getAllRows()) {
-            col = 0;
-            for (BoardSquare boardSquare : list) {
-                cardContainer.add(new CardPane(boardSquare),col, row );
-                col++;
-            }
-            row++;
-        }
-    }
 }
+
+
 
 
