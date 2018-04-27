@@ -1,9 +1,7 @@
 import javafx.application.Application;
-import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
-import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 
@@ -14,15 +12,10 @@ import javafx.event.EventHandler;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Circle;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Polygon;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.lang.IllegalArgumentException;
 import java.util.ArrayList;
 
@@ -58,6 +51,9 @@ public class SetGui extends Application implements EventHandler<ActionEvent> {
         exitGame = new Button("Exit");
         findSet = new Button("Help!");
 
+        /**
+         adds three cards to the board
+         */
         add3.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -68,13 +64,20 @@ public class SetGui extends Application implements EventHandler<ActionEvent> {
             }
         });
 
+        /**
+         starts a new game instance in the window
+         */
         newGame.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                game.clearFound();
                 start(primaryStage);
             }
         });
 
+        /**
+         exits instance of the game
+         */
         exitGame.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -82,9 +85,13 @@ public class SetGui extends Application implements EventHandler<ActionEvent> {
             }
         });
 
+        /**
+         calls find set method
+         */
         findSet.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                game.clearFound();
                 game.setFound(game.findSet());
                 drawBoard();
             }
@@ -126,35 +133,30 @@ public class SetGui extends Application implements EventHandler<ActionEvent> {
         primaryStage.setScene(primaryScene);
 
         primaryStage.show();
-
-
     }
 
 
-
-    @Override
-    public void handle(ActionEvent event) {
-
-
-    }
-
-
+    /**
+     draws the board and all cards it contains
+     adds listeners to cards
+     */
     public void drawBoard(){
         cardContainer.getChildren().clear();
         cardsLeft.setText("Cards Left: " + game.cardsLeft());
-        int row = 0;
-        int col;
-        for (ArrayList<BoardSquare> list : game.getAllRows()) {
-            col = 0;
-            for (BoardSquare boardSquare : list) {
-                CardPane pane = new CardPane(boardSquare);
-                pane.setAlignment(Pos.CENTER);
-                pane.setPrefSize(200, 250);
-                pane.setSpacing(10);
-                pane.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
-                    @Override
-                    public void handle(javafx.scene.input.MouseEvent event) {
-                            CardPane c = (CardPane)(event.getSource());
+        if (!game.isOver()) {
+            int row = 0;
+            int col;
+            for (ArrayList<BoardSquare> list : game.getAllRows()) {
+                col = 0;
+                for (BoardSquare boardSquare : list) {
+                    CardPane pane = new CardPane(boardSquare);
+                    pane.setAlignment(Pos.CENTER);
+                    pane.setPrefSize(200, 250);
+                    pane.setSpacing(10);
+                    pane.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
+                        @Override
+                        public void handle(javafx.scene.input.MouseEvent event) {
+                            CardPane c = (CardPane) (event.getSource());
                             BoardSquare b = c.getBoardSquare();
                             if (b.isSelected()) {
                                 b.setSelect(false);
@@ -172,20 +174,36 @@ public class SetGui extends Application implements EventHandler<ActionEvent> {
                             }
 
                             drawBoard();
-                    }
-                });
-                cardContainer.add(pane ,col, row );
-                col++;
+                        }
+                    });
+                    cardContainer.add(pane, col, row);
+                    col++;
+                }
+                row++;
             }
-            row++;
+        } else {
+            Text end = new Text("You Win!");
+            end.setStyle("-fx-font: 30 arial");
+            cardContainer.getChildren().add(end);
         }
     }
 
+    @Override
+    public void handle(ActionEvent event) {
+
+    }
+
+    /**
+     class to store and display BoardSquare objects
+     */
     public class CardPane extends VBox {
         private BoardSquare boardSquare;
 
 
-
+        /**
+         constructor, takes BoardSquare object and uses attributes to draw shapes
+         @param boardSquare square being drawn
+         */
         public CardPane(BoardSquare boardSquare){
             if (boardSquare.hasCard()) {
                 this.boardSquare = boardSquare;
@@ -207,10 +225,15 @@ public class SetGui extends Application implements EventHandler<ActionEvent> {
 
         }
 
-        public BoardSquare getBoardSquare() {
-            return boardSquare;
-        }
+        /**
+         gives square from instance of a card pane
+         @return BoardSquare in a given card pane
+         */
+        public BoardSquare getBoardSquare() { return boardSquare; }
 
+        /**
+         draws card as specified by it's attributes
+         */
         public void drawCard() {
             if (boardSquare.hasCard()) {
                 int color = boardSquare.getCard().getColor();
@@ -233,6 +256,11 @@ public class SetGui extends Application implements EventHandler<ActionEvent> {
             }
         }
 
+        /**
+         Draws square objects of a given color and fill
+         @param color color of square
+         @param fill fill of square
+         */
         public void drawSquare(int color, int fill){
             Rectangle r = new Rectangle(50, 50);
             switch (color) {
@@ -263,10 +291,14 @@ public class SetGui extends Application implements EventHandler<ActionEvent> {
             this.getChildren().add(r);
         }
 
+        /**
+         draws diamonds of a given color and fill
+         @param color diamond color
+         @param fill diamond fill
+         */
         public void drawSquiggle(int color, int fill){
             Polygon p = new Polygon();
 
-            //Adding coordinates to the polygon
             p.getPoints().addAll(60.0, 10.0,
                                           90.0, 30.0,
                                           60.0, 50.0,
@@ -300,6 +332,11 @@ public class SetGui extends Application implements EventHandler<ActionEvent> {
 
         }
 
+        /**
+         draws circles of a given color and fill
+         @param color circle color
+         @param fill circle fill
+         */
         public void drawOval(int color, int fill){
             Circle c = new Circle(25);
             switch (color) {

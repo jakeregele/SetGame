@@ -13,7 +13,7 @@ public class Game {
      */
     public Game(){
         deck = new Deck();
-        deck.shuffle();
+        //deck.shuffle();
         board = new Board(deck);
         selected = new ArrayList<>();
         found = new ArrayList<>();
@@ -106,8 +106,8 @@ public class Game {
         for (int a = 0 ; a < board.numRows() ; a++){
             for (int b = 0; b < board.numColumns() ; b++){
                 for (int c = 0; c < board.numRows() ; c++){
-                    for (int d = 1 ; d < board.numColumns() ; d++){
-                        if (board.getCard(a, b) != board.getCard(c, d)) {
+                    for (int d = 0; d < board.numColumns() ; d++){
+                        if (!board.getCard(a, b).equals(board.getCard(c, d))) {
                             String thirdCard =
                                     Card.cardEncoder(Card.thirdCard(board.getCard(a, b), board.getCard(c, d)));
                             if (BoardSquare.containsKey(thirdCard)) {
@@ -186,5 +186,18 @@ public class Game {
         return board.toString();
     }
 
+    /**
+     looks at cards on board to determine if a game is over
+     @return whether or not the game has finished
+     */
+    public boolean isOver() {
+        for (ArrayList<BoardSquare> list : board.getAllRows()){
+            for (BoardSquare b : list) {
+                if (b.hasCard())
+                    return false;
+            }
+        }
+        return true;
+    }
 
 }

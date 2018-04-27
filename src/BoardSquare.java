@@ -76,7 +76,7 @@ public class BoardSquare {
      */
     public void setCard(Card c) {
         dict.remove(Card.cardEncoder(c));
-        dict.put(Card.cardEncoder(c), new int[]{column, row});
+        dict.put(Card.cardEncoder(c), new int[]{row, column});
         card = c;
     }
 

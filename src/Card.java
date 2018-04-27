@@ -179,4 +179,16 @@ public class Card {
 
        return out;
    }
+
+    /**
+     overload .equals for card objects
+     @param c card being checked
+     @return whether or not cards are the same
+     */
+    public boolean equals(Card c) {
+        return this.getColor() == c.getColor() &&
+                this.getFill() == c.getFill() &&
+                this.getNum() == c.getNum() &&
+                this.getShape() == c.getShape();
+    }
 }
