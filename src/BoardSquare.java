@@ -155,7 +155,11 @@ public class BoardSquare {
         return dict.get(cardHash);
     }
 
-
+    /**
+     returns true if key is in card dict
+     @param key key to be checked
+     @return whether or not a card is in the dict
+     */
     public static boolean containsKey(String key){
         return dict.containsKey(key);
     }

@@ -3,7 +3,8 @@ import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
-import javafx.scene.text.Font;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 
 import javafx.scene.text.Text;
@@ -14,11 +15,15 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Circle;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.Polygon;
 import javafx.geometry.Pos;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.lang.IllegalArgumentException;
 import java.util.ArrayList;
 
 
@@ -245,7 +250,12 @@ public class SetGui extends Application implements EventHandler<ActionEvent> {
                     r.setFill(r.getStroke());
                     break;
                 case 1:
-                    r.setFill(Paint.valueOf("GREY"));
+                    try {
+                        Image img = new Image("hatch.png");
+                        r.setFill(new ImagePattern(img));
+                    } catch (IllegalArgumentException e) {
+                        r.setFill(Paint.valueOf("GREY"));
+                    }
                     break;
                 case 2:
                     r.setFill(Paint.valueOf("WHITE"));
@@ -254,28 +264,39 @@ public class SetGui extends Application implements EventHandler<ActionEvent> {
         }
 
         public void drawSquiggle(int color, int fill){
-            Ellipse e = new Ellipse(25, 15);
+            Polygon p = new Polygon();
+
+            //Adding coordinates to the polygon
+            p.getPoints().addAll(60.0, 10.0,
+                                          90.0, 30.0,
+                                          60.0, 50.0,
+                                          30.0, 30.0);
             switch (color) {
                 case 0:
-                    e.setStroke(Paint.valueOf("RED"));
+                    p.setStroke(Paint.valueOf("RED"));
                     break;
                 case 1:
-                    e.setStroke(Paint.valueOf("BLUE"));
+                    p.setStroke(Paint.valueOf("BLUE"));
                     break;
                 case 2:
-                    e.setStroke(Paint.valueOf("GREEN"));
+                    p.setStroke(Paint.valueOf("GREEN"));
             }
             switch (fill) {
                 case 0:
-                    e.setFill(e.getStroke());
+                    p.setFill(p.getStroke());
                     break;
                 case 1:
-                    e.setFill(Paint.valueOf("GREY"));
+                    try {
+                        Image img = new Image("hatch.png");
+                        p.setFill(new ImagePattern(img));
+                    } catch (IllegalArgumentException e) {
+                        p.setFill(Paint.valueOf("GREY"));
+                    }
                     break;
                 case 2:
-                    e.setFill(Paint.valueOf("WHITE"));
+                    p.setFill(Paint.valueOf("WHITE"));
             }
-            this.getChildren().add(e);
+            this.getChildren().add(p);
 
         }
 
@@ -296,7 +317,12 @@ public class SetGui extends Application implements EventHandler<ActionEvent> {
                     c.setFill(c.getStroke());
                     break;
                 case 1:
-                    c.setFill(Paint.valueOf("GREY"));
+                    try {
+                        Image img = new Image("hatch.png");
+                        c.setFill(new ImagePattern(img));
+                    } catch (IllegalArgumentException e) {
+                        c.setFill(Paint.valueOf("GREY"));
+                    }
                     break;
                 case 2:
                     c.setFill(Paint.valueOf("WHITE"));

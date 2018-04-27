@@ -44,6 +44,10 @@ public class Deck {
       return null;
    }
 
+    /**
+     retuns cards left in deck
+     @return amount of cards in deck
+     */
    public int cardsLeft() { return  deck.size(); }
    
    @Override

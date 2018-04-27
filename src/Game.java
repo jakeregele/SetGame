@@ -13,7 +13,7 @@ public class Game {
      */
     public Game(){
         deck = new Deck();
-        //deck.shuffle();
+        deck.shuffle();
         board = new Board(deck);
         selected = new ArrayList<>();
         found = new ArrayList<>();
@@ -175,6 +175,10 @@ public class Game {
      */
     public BoardSquare getBoardSquare(int [] arr) { return board.getBoardSquare(arr[0], arr[1]);}
 
+    /**
+     returns amount of cards in deck
+     @return number of cards left in the deck
+     */
     public int cardsLeft() { return deck.cardsLeft(); }
 
     @Override
