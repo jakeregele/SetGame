@@ -3,6 +3,7 @@ import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import javafx.scene.text.Text;
@@ -94,6 +95,7 @@ public class SetGui extends Application implements EventHandler<ActionEvent> {
         cardContainer.setAlignment(Pos.CENTER);
 
         title = new Text("Game of Set");
+        title.setStyle("-fx-font: 35 arial");
         cardsLeft = new Text("Cards left: " + game.cardsLeft());
 
         drawBoard();
@@ -102,8 +104,13 @@ public class SetGui extends Application implements EventHandler<ActionEvent> {
         bottomContainer.getChildren().add(findSet);
         bottomContainer.getChildren().add(exitGame);
         bottomContainer.getChildren().add(cardsLeft);
+        bottomContainer.setAlignment(Pos.CENTER);
+        bottomContainer.setPadding(new Insets(10, 0, 10, 0));
+        bottomContainer.setSpacing(10);
 
         titleContainer.getChildren().add(title);
+        titleContainer.setAlignment(Pos.CENTER);
+        titleContainer.setPadding(new Insets(10, 0, 10, 0));
 
         primaryPane.setBottom(bottomContainer);
         primaryPane.setCenter(cardContainer);
@@ -136,6 +143,9 @@ public class SetGui extends Application implements EventHandler<ActionEvent> {
             col = 0;
             for (BoardSquare boardSquare : list) {
                 CardPane pane = new CardPane(boardSquare);
+                pane.setAlignment(Pos.CENTER);
+                pane.setPrefSize(200, 250);
+                pane.setSpacing(10);
                 pane.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
                     @Override
                     public void handle(javafx.scene.input.MouseEvent event) {
@@ -172,21 +182,23 @@ public class SetGui extends Application implements EventHandler<ActionEvent> {
 
 
         public CardPane(BoardSquare boardSquare){
-            this.boardSquare = boardSquare;
-            if (boardSquare.isSelected()) {
-                this.setBackground(new Background(new BackgroundFill(Paint.valueOf("ALICEBLUE"),
-                        new CornerRadii(0),
-                        new Insets(0))));
-            } else if (boardSquare.isFound()) {
-                this.setBackground(new Background(new BackgroundFill(Paint.valueOf("RED"),
-                        new CornerRadii(0),
-                        new Insets(0))));
-            } else {
-                this.setBackground(new Background(new BackgroundFill(Paint.valueOf("WHITE"),
-                        new CornerRadii(0),
-                        new Insets(0))));
+            if (boardSquare.hasCard()) {
+                this.boardSquare = boardSquare;
+                if (boardSquare.isSelected()) {
+                    this.setBackground(new Background(new BackgroundFill(Paint.valueOf("LIGHTBLUE"),
+                            new CornerRadii(0),
+                            new Insets(0))));
+                } else if (boardSquare.isFound()) {
+                    this.setBackground(new Background(new BackgroundFill(Paint.valueOf("LIGHTCORAL"),
+                            new CornerRadii(0),
+                            new Insets(0))));
+                } else {
+                    this.setBackground(new Background(new BackgroundFill(Paint.valueOf("WHITE"),
+                            new CornerRadii(0),
+                            new Insets(0))));
+                }
+                drawCard();
             }
-            drawCard();
 
         }
 
@@ -195,23 +207,23 @@ public class SetGui extends Application implements EventHandler<ActionEvent> {
         }
 
         public void drawCard() {
-            int color = boardSquare.getCard().getColor();
-            int shape = boardSquare.getCard().getShape();
-            int fill = boardSquare.getCard().getFill();
-            int num = boardSquare.getCard().getNum();
+            if (boardSquare.hasCard()) {
+                int color = boardSquare.getCard().getColor();
+                int shape = boardSquare.getCard().getShape();
+                int fill = boardSquare.getCard().getFill();
+                int num = boardSquare.getCard().getNum();
 
-            for (int i = 1; i <= num + 1 ; i++) {
-                switch (shape) {
-                    case 0:
-                        drawOval(color, fill);
-                        break;
-                    case 1:
-                        drawSquare(color, fill);
-                        break;
-                    case 2:
-                        drawSquiggle(color, fill);
-
-
+                for (int i = 1; i <= num + 1; i++) {
+                    switch (shape) {
+                        case 0:
+                            drawOval(color, fill);
+                            break;
+                        case 1:
+                            drawSquare(color, fill);
+                            break;
+                        case 2:
+                            drawSquiggle(color, fill);
+                    }
                 }
             }
         }

@@ -155,12 +155,15 @@ public class Card {
      @return ordinals of card values converted to binary, concatenated, and then converted back to base 10
      */
    public static String cardEncoder(Card c){
-       String out = Integer.toString(c.color.ordinal()) +
-                    Integer.toString(c.shape.ordinal()) +
-                    Integer.toString(c.number.ordinal()) +
-                    Integer.toString(c.fill.ordinal());
+       if (c != null) {
+           String out = Integer.toString(c.color.ordinal()) +
+                   Integer.toString(c.shape.ordinal()) +
+                   Integer.toString(c.number.ordinal()) +
+                   Integer.toString(c.fill.ordinal());
 
-       return out;
+           return out;
+       }
+       return null;
    }
 
     /**

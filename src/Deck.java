@@ -38,7 +38,11 @@ public class Deck {
     to the caller
     @return card from the top of the deck
     */
-   public Card getTopCard(){ return deck.remove(deck.size()-1); }
+   public Card getTopCard(){
+      if (!deck.isEmpty())
+        return deck.remove(deck.size()-1);
+      return null;
+   }
 
    public int cardsLeft() { return  deck.size(); }
    
